@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ReqResMeta",
+  "description": "Reqres API metadata appended to every response",
+  "type": "object",
+  "properties": {
+    "powered_by": { "type": "string" },
+    "docs_url":   { "type": "string" },
+    "upgrade_url":{ "type": "string" },
+    "example_url":{ "type": "string" },
+    "variant":    { "type": "string" },
+    "message":    { "type": "string" },
+    "cta": {
+      "type": "object",
+      "properties": {
+        "label": { "type": "string" },
+        "url":   { "type": "string" }
+      }
+    },
+    "context": { "type": "string" }
+  }
+}
