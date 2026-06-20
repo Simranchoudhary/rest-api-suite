@@ -1,13 +1,13 @@
 from .test_data import (
-    VALID_CREDS,
+    EXISTING_USER_ID,
+    INVALID_PAGE,
+    NEW_USER,
+    NON_EXISTENT_USER_ID,
     REGISTER_CREDS,
     UNREGISTERED_USER,
-    NEW_USER,
     UPDATED_USER,
-    EXISTING_USER_ID,
-    NON_EXISTENT_USER_ID,
+    VALID_CREDS,
     VALID_PAGE,
-    INVALID_PAGE,
 )
 
 __all__ = [

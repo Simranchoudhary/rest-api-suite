@@ -1,11 +1,8 @@
 import json
 from pathlib import Path
-import jsonschema
-from jsonschema import ValidationError
-from jsonschema.validators import validator_for
-import referencing
-from referencing import Registry, Resource
 
+from jsonschema.validators import validator_for
+from referencing import Registry, Resource
 
 SCHEMAS_DIR = Path(__file__).parent.parent / "schemas"
 

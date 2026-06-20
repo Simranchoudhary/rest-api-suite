@@ -1,4 +1,5 @@
 import pytest
+
 from clients import AuthClient, UsersClient
 from fixtures import VALID_CREDS
 

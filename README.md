@@ -1,6 +1,10 @@
 # REST API Automation Suite
 
-A senior-level API test automation framework built with Python, Requests, and PyTest — covering auth flows, user CRUD workflows, error-case validation, and JSON Schema contract testing across multiple environments.
+[![CI](https://github.com/Simranchoudhary/rest-api-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/Simranchoudhary/rest-api-suite/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)
+![Tests](https://img.shields.io/badge/tests-76%20passing-brightgreen)
+
+A senior-level API test automation framework built with Python, Requests, and PyTest — covering auth flows, user CRUD workflows, error-case validation, JSON Schema contract testing, SLA assertions, and resilience testing across multiple environments.
 
 ---
 
@@ -11,7 +15,9 @@ A senior-level API test automation framework built with Python, Requests, and Py
 - **PyTest** — test runner
 - **jsonschema** — JSON Schema contract validation
 - **pytest-html** — HTML test reports
+- **pytest-retry** — automatic retry on flaky network conditions
 - **python-dotenv** — environment config
+- **Ruff** — linting and import sorting
 
 ---
 
@@ -19,32 +25,38 @@ A senior-level API test automation framework built with Python, Requests, and Py
 
 ```
 rest-api-suite/
+├── .github/
+│   ├── workflows/ci.yml                        # GitHub Actions — lint + test on push/PR
+│   └── PULL_REQUEST_TEMPLATE/
+│       └── pull_request_template.md
 ├── clients/
-│   ├── base_client.py       # Shared session, headers, timeout, SSL config
-│   ├── auth_client.py       # Login and register endpoints
-│   └── users_client.py      # Full CRUD — list, get, create, put, patch, delete
+│   ├── base_client.py                          # Shared session, headers, timeout, SSL config
+│   ├── auth_client.py                          # Login and register endpoints
+│   └── users_client.py                         # Full CRUD — list, get, create, put, patch, delete
 ├── config/
-│   └── settings.py          # Multi-env config (dev / staging / prod)
+│   └── settings.py                             # Multi-env config (dev / staging / prod)
 ├── fixtures/
-│   └── test_data.py         # Typed test data — no magic strings in tests
+│   └── test_data.py                            # Typed test data — no magic strings in tests
 ├── schemas/
-│   ├── _meta.json           # Shared reqres.in metadata schema
+│   ├── _meta.json                              # Shared reqres.in metadata schema ($ref target)
 │   ├── auth_login.json
 │   ├── auth_register.json
 │   ├── user.json
 │   ├── users_list.json
 │   └── created_user.json
 ├── tests/
-│   ├── conftest.py          # Session-scoped fixtures and auth token setup
-│   ├── test_auth.py         # 17 auth tests
-│   ├── test_users.py        # 29 CRUD tests
-│   └── test_contracts.py    # 13 contract/schema tests
+│   ├── conftest.py                             # Session-scoped fixtures and auth token setup
+│   ├── test_auth.py                            # 17 auth tests
+│   ├── test_users.py                           # 29 CRUD tests
+│   ├── test_contracts.py                       # 13 contract/schema tests
+│   └── test_resilience.py                      # 17 delayed response + parametrized edge cases
 ├── utils/
-│   └── validators.py        # Schema validation + response time assertion
-├── reports/                 # HTML reports (git-ignored)
+│   └── validators.py                           # Schema validation + response time assertion
+├── reports/                                    # HTML reports (git-ignored)
 ├── .env.example
-├── pytest.ini
-└── requirements.txt
+├── Makefile
+├── pyproject.toml                              # All config: deps, pytest, ruff
+└── CONTRIBUTING.md
 ```
 
 ---
@@ -84,19 +96,20 @@ REQRES_API_KEY=your_key_here          # Free key from https://app.reqres.in/api-
 ## Running Tests
 
 ```bash
-# All 59 tests
-pytest
+make test              # all 76 tests
+make test-auth         # auth and registration tests
+make test-users        # user CRUD tests
+make test-contract     # JSON Schema contract tests
+make test-slow         # delayed response / resilience tests
+make lint              # ruff lint check
+make report            # open HTML report in browser
+```
 
-# By marker
-pytest -m auth          # Auth and registration tests
-pytest -m users         # User CRUD tests
-pytest -m contract      # JSON Schema contract tests
+Or run pytest directly:
 
-# Verbose output
-pytest -v
-
-# Stop on first failure
-pytest -x
+```bash
+pytest -x              # stop on first failure
+pytest -v --tb=long    # verbose with full tracebacks
 ```
 
 HTML report is generated automatically at `reports/report.html`:
@@ -119,6 +132,7 @@ open reports/report.html
 | **Users — Update** | 7 | PUT 200, name/job updated, updatedAt; PATCH 200, partial update, updatedAt |
 | **Users — Delete** | 2 | 204, empty body |
 | **Contracts** | 13 | Schema validation for every endpoint; parametrized across all user IDs 1–6 |
+| **Resilience** | 17 | SLA under artificial delay, parametrized invalid logins, null/empty/max-length inputs, negative user IDs |
 
 ---
 

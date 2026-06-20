@@ -1,7 +1,7 @@
 import pytest
-from clients import AuthClient
-from fixtures import VALID_CREDS, REGISTER_CREDS, UNREGISTERED_USER
-from utils import validate_schema, assert_response_time
+
+from fixtures import REGISTER_CREDS, UNREGISTERED_USER, VALID_CREDS
+from utils import assert_response_time, validate_schema
 
 
 @pytest.mark.auth

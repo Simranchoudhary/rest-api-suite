@@ -1,13 +1,14 @@
 import pytest
+
 from fixtures import (
     EXISTING_USER_ID,
-    NON_EXISTENT_USER_ID,
+    INVALID_PAGE,
     NEW_USER,
+    NON_EXISTENT_USER_ID,
     UPDATED_USER,
     VALID_PAGE,
-    INVALID_PAGE,
 )
-from utils import validate_schema, assert_response_time
+from utils import assert_response_time, validate_schema
 
 
 @pytest.mark.users

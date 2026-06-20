@@ -4,8 +4,8 @@ These run independently of functional assertions — a contract test failure
 means the API changed shape, not just behaviour.
 """
 import pytest
-from clients import AuthClient, UsersClient
-from fixtures import VALID_CREDS, REGISTER_CREDS, EXISTING_USER_ID, NEW_USER
+
+from fixtures import EXISTING_USER_ID, NEW_USER, REGISTER_CREDS, VALID_CREDS
 from utils import validate_schema
 
 
