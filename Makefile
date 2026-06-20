@@ -3,7 +3,7 @@
 install:
 	python3 -m venv .venv
 	.venv/bin/pip install --upgrade pip
-	.venv/bin/pip install -r requirements.txt
+	.venv/bin/pip install -e .
 
 test:
 	.venv/bin/pytest
@@ -25,6 +25,12 @@ lint:
 
 lint-fix:
 	.venv/bin/ruff check . --fix
+
+coverage:
+	.venv/bin/pytest --cov=clients --cov=config --cov=utils --cov=fixtures --cov-report=html:reports/coverage --cov-report=term-missing
+
+setup-hooks:
+	.venv/bin/pre-commit install
 
 report:
 	open reports/report.html

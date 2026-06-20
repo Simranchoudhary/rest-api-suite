@@ -12,6 +12,8 @@ dependencies = [
     "referencing==0.35.1",
     "python-dotenv==1.0.1",
     "ruff==0.9.10",
+    "pytest-cov==6.1.0",
+    "pre-commit==4.2.0",
 ]
 
 [tool.pytest.ini_options]
@@ -30,10 +32,18 @@ markers = [
     "users:    User CRUD workflow tests",
     "contract: JSON Schema contract validation tests",
     "slow:     Tests that exercise delayed responses or make multiple requests",
+    "workflow: End-to-end lifecycle tests",
+    "headers:  Response header validation tests",
 ]
 
 [tool.setuptools]
 packages = []
+
+[tool.coverage.run]
+source = ["clients", "config", "utils", "fixtures"]
+
+[tool.coverage.report]
+show_missing = true
 
 [tool.ruff]
 line-length = 100

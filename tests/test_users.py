@@ -147,6 +147,30 @@ class TestUpdateUser:
 
 
 @pytest.mark.users
+class TestUnknownResource:
+    def test_list_unknown_returns_200(self, users_client):
+        response = users_client.get_unknown_resource()
+        assert response.status_code == 200
+
+    def test_list_unknown_returns_data(self, users_client):
+        response = users_client.get_unknown_resource()
+        assert len(response.json()["data"]) > 0
+
+    def test_get_single_unknown_returns_200(self, users_client):
+        response = users_client.get_unknown_resource(resource_id=2)
+        assert response.status_code == 200
+
+    def test_get_single_unknown_has_expected_fields(self, users_client):
+        body = users_client.get_unknown_resource(resource_id=2).json()["data"]
+        for field in ("id", "name", "year", "color", "pantone_value"):
+            assert field in body
+
+    def test_get_nonexistent_unknown_returns_404(self, users_client):
+        response = users_client.get_unknown_resource(resource_id=NON_EXISTENT_USER_ID)
+        assert response.status_code == 404
+
+
+@pytest.mark.users
 class TestDeleteUser:
     def test_delete_user_returns_204(self, users_client):
         response = users_client.delete_user(EXISTING_USER_ID)
